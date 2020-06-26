@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { UsersService } from '../users.service';
 
 @Component({
   selector: 'app-user',
@@ -9,19 +10,20 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 export class UserComponent implements OnInit {
   user: {id: number, name: string};
 
-  constructor(private route: ActivatedRoute) { }
-
+  constructor(private usersService: UsersService,
+    private route: ActivatedRoute,
+    private router: Router) { }
+  
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    const name = this.route.snapshot.paramMap.get('name');
-
-    this.user = {id: +id, name};
-
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.user = this.usersService.getUser(id);
     this.route.paramMap.subscribe(
       (paramMap: ParamMap) => {
-        this.user= {id: +paramMap.get('id'), name: paramMap.get('name')}
+        this.user = this.usersService.getUser(+paramMap.get('id'));
       }
     )
   }
 
+
 }
+

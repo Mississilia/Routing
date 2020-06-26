@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { UsersService } from './users.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -6,18 +8,15 @@ import { Component } from '@angular/core';
   styleUrls: ['./users.component.css']
 })
 export class UsersComponent {
-  users = [
-    {
-      id: 1,
-      name: 'Max'
-    },
-    {
-      id: 2,
-      name: 'Anna'
-    },
-    {
-      id: 3,
-      name: 'Chris'
-    }
-  ];
+  users: {id: number, name: string}[] = [];
+  constructor(private usersService:UsersService, private router: Router, private route: ActivatedRoute){
+  }
+
+  ngOnInit() {
+    this.users = this.usersService.getUsers();
+  }
+  
+  goToServerURL() {
+    this.router.navigate(['/users'], {relativeTo: this.route});
+  }
 }
